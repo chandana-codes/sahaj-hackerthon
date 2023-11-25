@@ -1,9 +1,14 @@
-const businessListings = [];
+const businessListings = {
+  businessListingId: string
+  businessName: string,
+  ownerName: string,
+  category: string,
+  city: string,
+  establishmentYear: int
+};
 
 function create(businessListingRequest) {
-
   const existingListing = businessListings.find(listing => listing.businessName === businessListingRequest.businessName);
-
     if (existingListing) {
         return null;
     }
@@ -19,14 +24,10 @@ function create(businessListingRequest) {
 
     businessListings.push(newBusinessListing);
     return newBusinessListing;
-  
 
   function generateUniqueId() {
     return Math.random().toString(36).substr(2, 9);
   }
-
-
-  return null;
 
 };
 
