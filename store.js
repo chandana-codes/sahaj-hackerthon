@@ -32,8 +32,13 @@ function create(businessListingRequest) {
 };
 
 function read(id) {
-  return null;
-}
+    const foundListing = businessListings.find(listing => listing.businessListingId === id);
+
+    if (foundListing) {
+        return foundListing;
+    }
+    return null;
+};
 
 function readAll(){
   return [];
