@@ -1,11 +1,4 @@
-const businessListings = {
-  businessListingId: string
-  businessName: string,
-  ownerName: string,
-  category: string,
-  city: string,
-  establishmentYear: int
-};
+const businessListings = [];
 
 function create(businessListingRequest) {
   const existingListing = businessListings.find(listing => listing.businessName === businessListingRequest.businessName);
@@ -115,4 +108,4 @@ function aggregate(aggregateCriteria){
     return aggregatedResults;
 };
 
-module.exports = {create, read, readAll, search, aggregate}
+module.exports = {create, read, readAll, search, aggregate};
