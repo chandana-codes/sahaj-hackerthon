@@ -59,7 +59,7 @@ Backend functionality is written such that requests will be accepted over HTTP a
 ## Data to be stored
 ```
 {
-    businessListingId: string
+    businessListingId: string,
     businessName: string,
     ownerName: string,
     category: string,
