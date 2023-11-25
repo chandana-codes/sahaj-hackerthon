@@ -45,8 +45,30 @@ function readAll(){
 }
 
 function search(searchCriteria){
-  return [];
-}
+    const { condition, fields } = searchRequest;
+    if (!condition || !fields || fields.length === 0) {
+        return [];
+    }
+
+    const filterFunction = (listing) => {
+        return fields.every(criteria => {
+            const { fieldName, eq, neq } = criteria;
+
+            if (eq !== undefined) {
+                return listing[fieldName] === eq;
+            } else if (neq !== undefined) {
+                return listing[fieldName] !== neq;
+            }
+            return false;
+        });
+    };
+
+    const filteredListings = (condition.toUpperCase() === 'AND')
+        ? businessListings.filter(filterFunction)
+        : businessListings.filter(listing => fields.some(criteria => filterFunction({ ...listing }, criteria)));
+
+    return filteredListings;
+};
 
 function aggregate(aggregateCriteria){
   return [];
