@@ -71,7 +71,48 @@ function search(searchCriteria){
 };
 
 function aggregate(aggregateCriteria){
-  return [];
-}
+  const { groupByFields, aggregationRequests } = aggregateCriteria;
+
+    if (!groupByFields || !aggregationRequests || groupByFields.length === 0 || aggregationRequests.length === 0) {
+        return [];
+    }
+
+    const calculateAggregation = (aggregationFunction, values) => {
+        switch (aggregationFunction.toUpperCase()) {
+            case 'COUNT':
+                return values.length;
+            case 'MIN':
+                return Math.min(...values);
+            case 'MAX':
+                return Math.max(...values);
+            default:
+                return null;
+        }
+    };
+
+
+    const groupedListings = businessListings.reduce((groups, listing) => {
+        const key = groupByFields.map(field => listing[field]).join('-');
+        (groups[key] = groups[key] || []).push(listing);
+        return groups;
+    }, {});
+
+    const aggregatedResults = Object.entries(groupedListings).map(([groupKey, listings]) => {
+        const groupObject = {};
+        groupByFields.forEach((field, index) => {
+            groupObject[field] = listings[0][field]; 
+        });
+
+        aggregationRequests.forEach(request => {
+            const { fieldName, function: aggregationFunction, alias } = request;
+            const values = listings.map(listing => listing[fieldName]);
+            groupObject[alias] = calculateAggregation(aggregationFunction, values);
+        });
+
+        return groupObject;
+    });
+
+    return aggregatedResults;
+};
 
 module.exports = {create, read, readAll, search, aggregate}
