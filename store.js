@@ -41,7 +41,7 @@ function read(id) {
 };
 
 function readAll(){
-  return [];
+  return businessListings;
 }
 
 function search(searchCriteria){
