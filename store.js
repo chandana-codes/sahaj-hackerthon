@@ -1,10 +1,16 @@
-const businessListings = [];
+const businessListings = []; 
+
+function generateUniqueId() {
+    return Math.random().toString(36).substr(2, 9);
+}
 
 function create(businessListingRequest) {
-  const existingListing = businessListings.find(listing => listing.businessName === businessListingRequest.businessName);
+    const existingListing = businessListings.find(listing => listing.businessName === businessListingRequest.businessName);
+
     if (existingListing) {
-        return null;
+        return null; 
     }
+
     const businessListingId = generateUniqueId();
     const newBusinessListing = {
         businessListingId,
@@ -17,30 +23,22 @@ function create(businessListingRequest) {
 
     businessListings.push(newBusinessListing);
     return newBusinessListing;
-
-  function generateUniqueId() {
-    return Math.random().toString(36).substr(2, 9);
-  }
-
-};
+}
 
 function read(id) {
     const foundListing = businessListings.find(listing => listing.businessListingId === id);
-
-    if (foundListing) {
-        return foundListing;
-    }
-    return null;
+    return foundListing || null;
 };
 
-function readAll(){
+function readAll() {
   return businessListings;
-}
+};
 
-function search(searchCriteria){
+function search(searchRequest) {
     const { condition, fields } = searchRequest;
+
     if (!condition || !fields || fields.length === 0) {
-        return [];
+        return []; 
     }
 
     const filterFunction = (listing) => {
@@ -52,6 +50,7 @@ function search(searchCriteria){
             } else if (neq !== undefined) {
                 return listing[fieldName] !== neq;
             }
+
             return false;
         });
     };
@@ -61,13 +60,13 @@ function search(searchCriteria){
         : businessListings.filter(listing => fields.some(criteria => filterFunction({ ...listing }, criteria)));
 
     return filteredListings;
-};
+}
 
-function aggregate(aggregateCriteria){
-  const { groupByFields, aggregationRequests } = aggregateCriteria;
+function aggregate(aggregateCriteria) {
+    const { groupByFields, aggregationRequests } = aggregateCriteria;
 
     if (!groupByFields || !aggregationRequests || groupByFields.length === 0 || aggregationRequests.length === 0) {
-        return [];
+        return []; 
     }
 
     const calculateAggregation = (aggregationFunction, values) => {
@@ -82,7 +81,6 @@ function aggregate(aggregateCriteria){
                 return null;
         }
     };
-
 
     const groupedListings = businessListings.reduce((groups, listing) => {
         const key = groupByFields.map(field => listing[field]).join('-');
@@ -106,6 +104,6 @@ function aggregate(aggregateCriteria){
     });
 
     return aggregatedResults;
-};
+}
 
-module.exports = {create, read, readAll, search, aggregate};
+module.exports = { create, read, search, readAll, aggregate};
