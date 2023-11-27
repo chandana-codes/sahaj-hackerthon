@@ -17,7 +17,7 @@ describe('store', () => {
   })
 
   //remove x from prefix from the below after implementing logic
-  xtest('should create business listing', () => {
+  test('should create business listing', () => {
     const businessListingRequest = {businessName:"microBiz",ownerName:"Divy Sharma",category:"Food",city:"Mumbai",establishmentYear:2020};
 
     const result = store.create(businessListingRequest);
@@ -30,7 +30,7 @@ describe('store', () => {
   });
 
   //remove x from prefix from the below after implementing logic
-  xtest('should not create business listing with same name', () => {
+  test('should not create business listing with same name', () => {
     const businessListingRequest = {businessName:"microBiz",ownerName:"Divy Sharma",category:"Food",city:"Mumbai",establishmentYear:2020};
     store.create(businessListingRequest);
     const businessListingRequest1 = {businessName:"microBiz",ownerName:"Divy Sharma",category:"Food",city:"Mumbai",establishmentYear:2020};
@@ -41,7 +41,7 @@ describe('store', () => {
   });
 
   //remove x from prefix from the below after implementing logic
-  xtest('should get business listing by id', () => {
+  test('should get business listing by id', () => {
     const businessListingRequest = {businessName:"microBiz",ownerName:"Divy Sharma",category:"Food",city:"Mumbai",establishmentYear:2020};
     const preExistingBusinessListing = store.create(businessListingRequest);
 
@@ -54,7 +54,7 @@ describe('store', () => {
   });
 
   //remove x from prefix from the below after implementing logic
-  xtest('should get business listing by id', () => {
+  test('should get business listing by id', () => {
     const businessListingRequest = {businessName:"microBiz",ownerName:"Divy Sharma",category:"Food",city:"Mumbai",establishmentYear:2020};
     const preExistingBusinessListing = store.create(businessListingRequest);
 
@@ -67,7 +67,7 @@ describe('store', () => {
   });
 
   //remove x from prefix from the below after implementing logic
-  xtest('should get all business listing', () => {
+  test('should get all business listing', () => {
     const businessListingRequest1 = {businessName:"microBiz",ownerName:"Divy Sharma",category:"Food",city:"Mumbai",establishmentYear:2020};
     const preExistingBusinessListing1 = store.create(businessListingRequest1);
 
@@ -81,7 +81,7 @@ describe('store', () => {
   });
 
   //remove x from prefix from the below after implementing logic
-  xtest('should get business listing by search criteria', () => {
+  test('should get business listing by search criteria', () => {
     const searchRequest = {fields:[{fieldName:"city",eq:"Mumbai",neq:null}], condition:"AND"};
     const businessListingRequest1 = {businessName:"microBiz",ownerName:"Divy Sharma",category:"Food",city:"Mumbai",establishmentYear:2020};
     const preExistingBusinessListing1 = store.create(businessListingRequest1);
@@ -96,7 +96,7 @@ describe('store', () => {
   });
 
   //remove x from prefix from the below after implementing logic
-  xtest('should aggregate count of business listing by given group by fields', () => {
+  test('should aggregate count of business listing by given group by fields', () => {
     const aggregateRequest = {groupByFields:["city","category"], aggregationRequests:[{
       fieldName: "businessName",
       function: "COUNT",
@@ -120,7 +120,7 @@ describe('store', () => {
   });
 
   //remove x from prefix from the below after implementing logic
-  xtest('should aggregate minimum of business listing by given group by fields', () => {
+  test('should aggregate minimum of business listing by given group by fields', () => {
     const aggregateRequest = {groupByFields:["city","category"], aggregationRequests:[{
       fieldName: "establishmentYear",
       function: "MIN",
@@ -144,7 +144,7 @@ describe('store', () => {
   });
 
   //remove x from prefix from the below after implementing logic
-  xtest('should aggregate maximum of business listing by given group by fields', () => {
+  test('should aggregate maximum of business listing by given group by fields', () => {
     const aggregateRequest = {groupByFields:["city","category"], aggregationRequests:[{
       fieldName: "establishmentYear",
       function: "MAX",

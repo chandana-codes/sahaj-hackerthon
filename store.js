@@ -104,6 +104,6 @@ function aggregate(aggregateCriteria) {
     });
 
     return aggregatedResults;
-}
+};
 
 module.exports = { create, read, search, readAll, aggregate};
