@@ -1,41 +1,68 @@
-const businessListings = []; 
+const fs = require("fs").promises;
+const dataPath = "./businessListings.json";
+
+async function readBusinessListings() {
+  try {
+    const data = await fs.readFile(dataPath);
+    return JSON.parse(data);
+  } catch(err) {
+    console.error('Error occured while reading fs-store', err.message);
+  }
+};
+
+async function writeBusinessListings(data) {
+  try{
+    const currentData = await readBusinessListings();
+    const newData = {
+      ...currentData || {},
+      [data.businessListingId]: data
+    };
+    const writeData = await fs.writeFile(dataPath, JSON.stringify(newData));
+  }catch(err) {
+    console.error("Error occured while writing fs-store", err.message);
+  }
+};
 
 function generateUniqueId() {
-    return Math.random().toString(36).substring(2, 9);
-}
+  return Date.now().toString(36) + Math.random().toString(36).substring(2);
+};
 
 function create(businessListingRequest) {
-    const existingListing = businessListings.find(listing => listing.businessName === businessListingRequest.businessName);
+  const businessListingsData = readBusinessListings();
+  const businessListings = Object.values(businessListingsData);
+  const existingListing = businessListings.find(listing => listing.businessName === businessListingRequest.businessName);
 
-    if (existingListing) {
-        return null; 
-    }
+  if (existingListing) {
+      return null; 
+  }
 
-    const businessListingId = generateUniqueId();
-    const newBusinessListing = {
-        businessListingId,
-        businessName: businessListingRequest.businessName,
-        ownerName: businessListingRequest.ownerName,
-        category: businessListingRequest.category,
-        city: businessListingRequest.city,
-        establishmentYear: businessListingRequest.establishmentYear
-    };
+  const businessListingId = generateUniqueId();
+  const newBusinessListing = {
+      businessListingId,
+      businessName: businessListingRequest.businessName,
+      ownerName: businessListingRequest.ownerName,
+      category: businessListingRequest.category,
+      city: businessListingRequest.city,
+      establishmentYear: businessListingRequest.establishmentYear
+  };
 
-    businessListings.push(newBusinessListing);
-    return newBusinessListing;
-}
+  writeBusinessListings(newBusinessListing);
+  return newBusinessListing;
+};
 
 function read(id) {
-    const foundListing = businessListings.find(listing => listing.businessListingId === id);
-    return foundListing || null;
+  const businessListingsData = readBusinessListings();
+  return businessListingsData[id] || null;
 };
 
 function readAll() {
-  return businessListings;
+  return readBusinessListings();
 };
 
 function search(searchRequest) {
     const { condition, fields } = searchRequest;
+    const businessListingsData = readBusinessListings();
+    const businessListings = Object.values(businessListingsData);
 
     if (!condition || !fields || fields.length === 0) {
         return []; 
@@ -60,10 +87,12 @@ function search(searchRequest) {
         : businessListings.filter(listing => fields.some(criteria => filterFunction({ ...listing }, criteria)));
 
     return filteredListings;
-}
+};
 
 function aggregate(aggregateCriteria) {
     const { groupByFields, aggregationRequests } = aggregateCriteria;
+    const businessListingsData = readBusinessListings();
+    const businessListings = Object.values(businessListingsData);
 
     if (!groupByFields || !aggregationRequests || groupByFields.length === 0 || aggregationRequests.length === 0) {
         return []; 
